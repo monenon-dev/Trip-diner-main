@@ -164,5 +164,8 @@
 }
 
 @media (max-width: 520px) {
-  .hero-content { left: 18px; }
+  .hero-content { left: 18px; right: 18px; }
+  /* 360px 폭에서도 "보는 순간 설레는"이 한 줄에 들어가게 */
+  .hero-title { font-size: clamp(28px, 8.5vw, 52px); }
+  .hero-desc { font-size: 15px; }
 }

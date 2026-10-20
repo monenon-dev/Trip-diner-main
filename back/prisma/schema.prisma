@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 /**
@@ -94,7 +95,7 @@ model ai_history {
   user_id    BigInt?
   keyword_id BigInt?
   plan_id    BigInt?
-  created_at DateTime?   @default(now()) @db.DateTime(0)
+  created_at DateTime?   @default(now()) @db.Timestamp(0)
   user       user?       @relation(fields: [user_id], references: [user_id])
   ai_keyword ai_keyword? @relation(fields: [keyword_id], references: [keyword_id])
   plan       plan?       @relation(fields: [plan_id], references: [plan_id])
@@ -122,7 +123,7 @@ model comment {
   user_id       BigInt
   parent_id     BigInt?
   content       String?   @db.Text
-  created_at    DateTime? @default(now()) @db.DateTime(0)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
   post          post      @relation(fields: [post_id], references: [post_id])
   user          user      @relation(fields: [user_id], references: [user_id])
   comment       comment?  @relation("commentTocomment", fields: [parent_id], references: [comment_id])
@@ -146,7 +147,7 @@ model plan {
   start_date DateTime?    @db.Date
   end_date   DateTime?    @db.Date
   memo       String?      @db.Text
-  created_at DateTime?    @default(now()) @db.DateTime(0)
+  created_at DateTime?    @default(now()) @db.Timestamp(0)
   shared_url String?      @db.VarChar(500)
   ai_history ai_history[]
   user       user         @relation(fields: [user_id], references: [user_id])
@@ -191,14 +192,14 @@ model post {
   post_id    BigInt      @id @default(autoincrement())
   user_id    BigInt
   title      String?     @db.VarChar(255)
-  content    String?     @db.LongText
+  content    String?     @db.Text
   category   String?     @db.VarChar(50)
   image_url  String?     @db.VarChar(500)
   views      Int         @default(0)
   tags       String?     @db.VarChar(500)
   deleted    Int         @default(0)
-  created_at DateTime?   @default(now()) @db.DateTime(0)
-  updated_at DateTime?   @default(now()) @db.DateTime(0)
+  created_at DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at DateTime?   @default(now()) @db.Timestamp(0)
   comment    comment[]
   user       user        @relation(fields: [user_id], references: [user_id])
   post_like  post_like[]
@@ -216,7 +217,7 @@ model qna {
   user_id    BigInt
   title      String?      @db.VarChar(255)
   content    String?      @db.Text
-  created_at DateTime?    @default(now()) @db.DateTime(0)
+  created_at DateTime?    @default(now()) @db.Timestamp(0)
   status     qna_status   @default(WAITING)
   user       user         @relation(fields: [user_id], references: [user_id])
   qna_answer qna_answer[]
@@ -229,7 +230,7 @@ model qna_answer {
   qna_id     BigInt
   admin_id   BigInt
   content    String?   @db.Text
-  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   qna        qna       @relation(fields: [qna_id], references: [qna_id])
   admin      admin     @relation(fields: [admin_id], references: [admin_id])
 
@@ -247,7 +248,7 @@ model report {
   post_id    BigInt
   user_id    BigInt
   content    String?   @db.VarChar(500)
-  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   post       post      @relation(fields: [post_id], references: [post_id])
   user       user      @relation(fields: [user_id], references: [user_id])
 
@@ -266,7 +267,7 @@ model review_place {
   user_id    BigInt
   rating     Int?
   content    String?   @db.Text
-  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   place      place     @relation(fields: [place_id], references: [place_id])
   user       user      @relation(fields: [user_id], references: [user_id])
 
@@ -286,7 +287,7 @@ model user {
   name            String?           @db.VarChar(100)
   profile_img     String?           @db.VarChar(500)
   provider        String            @default("LOCAL") @db.VarChar(50)
-  created_at      DateTime?         @default(now()) @db.DateTime(0)
+  created_at      DateTime?         @default(now()) @db.Timestamp(0)
   deleted         Int?              @default(0)
   refresh_session refresh_session[]
   ai_history      ai_history[]
@@ -309,9 +310,9 @@ model refresh_session {
   session_id BigInt    @id @default(autoincrement())
   user_id    BigInt
   token_hash String    @unique @db.VarChar(64)
-  expires_at DateTime  @db.DateTime(0)
-  revoked_at DateTime? @db.DateTime(0)
-  created_at DateTime  @default(now()) @db.DateTime(0)
+  expires_at DateTime  @db.Timestamp(0)
+  revoked_at DateTime? @db.Timestamp(0)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
 
   user user @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
@@ -345,7 +346,7 @@ model place_like {
   like_id    BigInt    @id @default(autoincrement())
   user_id    BigInt
   place_id   BigInt
-  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   place      place     @relation(fields: [place_id], references: [place_id], onDelete: Cascade)
   user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 
@@ -358,7 +359,7 @@ model post_like {
   like_id    BigInt    @id @default(autoincrement())
   user_id    BigInt
   post_id    BigInt
-  created_at DateTime? @default(now()) @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   post       post      @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
   user       user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 

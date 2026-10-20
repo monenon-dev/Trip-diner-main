@@ -1,31 +1,9 @@
-import { fileURLToPath } from "url";
 import express from "express";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
 import prisma from "../../prisma/prismaClient.js";
 import { userAuth } from "../../middleware/userAuth.js";
+import { imageUpload as upload, uploadImage } from "../../utils/storage.js";
 
 const router = express.Router();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// 업로드 폴더 설정
-const uploadDir = path.join(__dirname, "../../uploads/postImages");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, uploadDir),
-  filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + "_" + Math.random().toString(36).slice(2) + ext);
-  },
-});
-
-const upload = multer({ storage });
 
 const safeJson = (obj) =>
   JSON.parse(
@@ -35,13 +13,13 @@ const safeJson = (obj) =>
   );
 
 // 이미지 업로드 
-router.post("/upload", upload.single("image"), (req, res) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "파일 업로드 실패" });
     }
 
-    const imageUrl = `/postImages/${req.file.filename}`;
+    const imageUrl = await uploadImage(req.file, "postImages");
     return res.json({ success: true, url: imageUrl });
   } catch (err) {
     console.error("이미지 업로드 오류:", err);
@@ -53,7 +31,7 @@ router.post("/upload", upload.single("image"), (req, res) => {
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const { user_id, title, content, category, tags } = req.body;
-    const imageUrl = req.file ? `/postImages/${req.file.filename}` : null;
+    const imageUrl = req.file ? await uploadImage(req.file, "postImages") : null;
 
     const newPost = await prisma.post.create({
       data: {

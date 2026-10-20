@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../config/api";
+import { API_BASE, toImageUrl } from "../../config/api";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/admin/AdminPosts.css";
@@ -156,7 +156,7 @@ export default function AdminPosts() {
 
               {selectedPost.image_url && (
                 <img
-                  src={`${SERVER_URL}${selectedPost.image_url}`}
+                  src={toImageUrl(selectedPost.image_url)}
                   alt="게시글 이미지"
                   style={{
                     maxWidth: "350px",

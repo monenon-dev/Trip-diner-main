@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, SERVER_URL, toImageUrl } from "../../../config/api";
 import React, { useRef, useState, useEffect } from "react";
 import "../../../styles/side/board/Board.css";
 
@@ -9,7 +9,7 @@ export default function BoardProfile({ user, setUser }) {
 
   useEffect(() => {
     if (user?.profile_img) {
-      const fullUrl = `${SERVER_URL}${user.profile_img}`;
+      const fullUrl = toImageUrl(user.profile_img);
       setProfileImg(fullUrl);
     }
   }, [user]);
@@ -37,7 +37,7 @@ export default function BoardProfile({ user, setUser }) {
       return;
     }
 
-    const fullUrl = `${SERVER_URL}${data.imageUrl}`;
+    const fullUrl = toImageUrl(data.imageUrl);
     setProfileImg(fullUrl);
 
     const updatedUser = { ...user, profile_img: data.imageUrl };

@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, toImageUrl } from "../../../config/api";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -113,7 +113,7 @@ export default function LikePosts({ userId: userIdProp }) {
                       <img
                         src={
                           item.post?.image_url
-                            ? `${SERVER_URL}${item.post.image_url}`
+                            ? toImageUrl(item.post.image_url)
                             : getFirstImage(item.post?.content)
                         }
                         className="like-img"

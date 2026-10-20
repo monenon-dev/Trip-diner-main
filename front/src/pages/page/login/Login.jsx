@@ -1,4 +1,4 @@
-import { SERVER_URL } from "../../../config/api";
+import { toImageUrl } from "../../../config/api";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -21,7 +21,7 @@ function Login({ setUser }) {
       const normalizedUser = {
         ...user,
         profile_img: user?.profile_img
-          ? `${SERVER_URL}${user.profile_img}`
+          ? toImageUrl(user.profile_img)
           : null,
       };
 

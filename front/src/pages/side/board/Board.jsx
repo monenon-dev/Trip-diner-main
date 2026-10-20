@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, toImageUrl } from "../../../config/api";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,13 +11,8 @@ export default function Board() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [user] = useState(storedUser);
 
-  const PROFILE_BASE_URL = `${SERVER_URL}`;
   const profileSrc = user?.profile_img
-    ? user.profile_img.startsWith(PROFILE_BASE_URL)
-      ? user.profile_img
-      : `${PROFILE_BASE_URL}${user.profile_img.startsWith("/") ? "" : "/"}${
-          user.profile_img
-        }`
+    ? toImageUrl(user.profile_img)
     : "/default_profile.png";
 
   const [posts, setPosts] = useState([]);

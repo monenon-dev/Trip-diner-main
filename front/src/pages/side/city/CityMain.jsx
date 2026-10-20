@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, toImageUrl } from "../../../config/api";
 import React, {
   useState,
   useEffect,
@@ -350,7 +350,7 @@ export default function CityMain({ user, setUser }) {
                   const imgSrc = firstImg
                     ? firstImg.startsWith("http")
                       ? firstImg
-                      : `${SERVER_URL}${firstImg}`
+                      : toImageUrl(firstImg)
                     : `https://picsum.photos/400/300?random=${pid}`;
 
                   return (

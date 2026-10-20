@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, SERVER_URL, toImageUrl } from "../../../config/api";
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/side/mypage/Profile.css";
@@ -100,7 +100,7 @@ export default function Profile({ user, setUser }) {
 
     const finalUrl = user.profile_img.startsWith("http")
       ? user.profile_img
-      : `${SERVER_URL}${user.profile_img}`;
+      : toImageUrl(user.profile_img);
 
     setProfileImg(finalUrl);
   }, [user]);
@@ -127,7 +127,7 @@ export default function Profile({ user, setUser }) {
         return;
       }
 
-      const fullUrl = `${SERVER_URL}${data.imageUrl}`;
+      const fullUrl = toImageUrl(data.imageUrl);
       setProfileImg(fullUrl);
 
       const updatedUser = {

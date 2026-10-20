@@ -1,4 +1,4 @@
-import { API_BASE, SERVER_URL } from "../../../config/api";
+import { API_BASE, toImageUrl } from "../../../config/api";
 import React, {
   useEffect,
   useState,
@@ -136,7 +136,7 @@ export default function BoardDetail() {
         <img
           src={
             comment.user?.profile_img
-              ? `${SERVER_URL}${comment.user.profile_img}`
+              ? toImageUrl(comment.user.profile_img)
               : "/default_profile.png"
           }
           className="comment-profile"
@@ -188,7 +188,7 @@ export default function BoardDetail() {
               <img
                 src={
                   post.user?.profile_img
-                    ? `${SERVER_URL}${post.user.profile_img}`
+                    ? toImageUrl(post.user.profile_img)
                     : "/default_profile.png"
                 }
                 className="meta-profile-img"

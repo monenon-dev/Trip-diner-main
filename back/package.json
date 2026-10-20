@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.0",
+    "@supabase/supabase-js": "^2.118.0",
     "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "calendar": "^0.1.1",

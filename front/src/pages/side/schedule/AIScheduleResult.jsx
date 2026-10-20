@@ -6,8 +6,6 @@ import "../../../styles/side/schedule/AIScheduleResult.css";
 import axios from "axios";
 import { placeLikesApi } from "../../../api/placeLikesApi";
 
-console.log("🎯 GOOGLE KEY:", process.env.REACT_APP_GOOGLE_API_KEY);
-
 // 카테고리 영문 → 한글 라벨 매핑
 const CATEGORY_LABELS = {
   restaurant: "음식점",

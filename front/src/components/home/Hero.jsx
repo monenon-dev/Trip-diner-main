@@ -20,7 +20,7 @@ export default function Hero({ heroRef }) {
     }
 
     // 자동재생이 막혀 영상이 멈춰 있는 경우 대비
-    const fallback = setTimeout(() => setEntered(true), 12000);
+    const fallback = setTimeout(() => setEntered(true), 18000);
     return () => clearTimeout(fallback);
   }, []);
 

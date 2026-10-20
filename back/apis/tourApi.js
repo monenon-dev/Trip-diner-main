@@ -26,7 +26,9 @@ function enqueueTourApi(fn) {
 async function _callTourAPI(path, params, opts = {}) {
   const timeoutMs = opts.timeoutMs ?? 12000;
 
+  // 값이 없는 파라미터는 빼야 함 (sigunguCode=undefined 가 붙으면 결과 0건)
   const query = Object.entries(params)
+    .filter(([, v]) => v !== undefined && v !== null && v !== "")
     .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
     .join("&");
 
@@ -133,7 +135,6 @@ export async function getPlaces({ areaCode, sigunguCode, contentTypeId, numOfRow
     areaCode,
     sigunguCode,
     contentTypeId,
-    listYN: "Y",
     arrange: "Q",
     _type: "json",
   });

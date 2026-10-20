@@ -1,7 +1,6 @@
 import axios from "axios";
+import { NAVER_SEARCH_BASE, naverSearchHeaders } from "../utils/naverSearch.js";
 
-const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID;
-const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
 
 export async function enhanceWithNaverLocal(title, address) {
   try {
@@ -9,12 +8,11 @@ export async function enhanceWithNaverLocal(title, address) {
     if (!query) return {};
 
     const res = await axios.get(
-      "https://openapi.naver.com/v1/search/local.json",
+      `${NAVER_SEARCH_BASE}/local`,
       {
         params: { query, display: 1 },
         headers: {
-          "X-Naver-Client-Id": NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": NAVER_CLIENT_SECRET,
+          ...naverSearchHeaders(),
         },
       }
     );
@@ -44,13 +42,12 @@ export async function enhanceWithNaverLocal(title, address) {
 export async function searchNaverImage(title) {
   try {
     const res = await axios.get(
-      `https://openapi.naver.com/v1/search/image?query=${encodeURIComponent(
+      `${NAVER_SEARCH_BASE}/image?query=${encodeURIComponent(
         title
       )}&display=1`,
       {
         headers: {
-          "X-Naver-Client-Id": NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": NAVER_CLIENT_SECRET,
+          ...naverSearchHeaders(),
         },
       }
     );

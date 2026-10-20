@@ -50,8 +50,8 @@ function setAndReturnJson(res, key, value, ttlMs, headers = {}) {
 
 router.use((req, res, next) => {
   if (LOG_EVENT) {
-    console.log("NAVER ID?", !!process.env.NAVER_CLIENT_ID);
-    console.log("NAVER SECRET?", !!process.env.NAVER_CLIENT_SECRET);
+    console.log("NAVER ID?", !!process.env.NAVER_SEARCH_CLIENT_ID);
+    console.log("NAVER SECRET?", !!process.env.NAVER_SEARCH_CLIENT_SECRET);
     console.log("GOOGLE KEY?", !!process.env.GOOGLE_API_KEY);
   }
   next();

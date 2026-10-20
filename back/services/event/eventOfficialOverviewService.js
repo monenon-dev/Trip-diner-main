@@ -9,25 +9,23 @@ import {
   normalizeKeyword,
   stripHtml,
 } from "./eventUtils.js";
+import { NAVER_SEARCH_BASE, naverSearchHeaders, hasNaverSearchKey } from "../../utils/naverSearch.js";
 
 async function searchWebNaver(query) {
-  const id = process.env.NAVER_CLIENT_ID;
-  const secret = process.env.NAVER_CLIENT_SECRET;
-  if (!id || !secret) return [];
+  if (!hasNaverSearchKey()) return [];
 
-  const url = `https://openapi.naver.com/v1/search/webkr.json?query=${encodeURIComponent(
+  const url = `${NAVER_SEARCH_BASE}/webkr?query=${encodeURIComponent(
     query
   )}&display=5&sort=sim`;
 
   const res = await fetch(url, {
     headers: {
-      "X-Naver-Client-Id": id,
-      "X-Naver-Client-Secret": secret,
+      ...naverSearchHeaders(),
     },
   });
 
   const text = await res.text();
-  if (!text.startsWith("{")) return [];
+  if (!text.trim().startsWith("{")) return [];
 
   const data = JSON.parse(text);
   return Array.isArray(data.items) ? data.items : [];

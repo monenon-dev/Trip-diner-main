@@ -2,6 +2,7 @@ import express from "express";
 import axios from "axios";
 import { searchPlaceByKeyword } from "../../apis/tourApi.js";
 import { searchGoogleDetails } from "../../apis/googlePlace.js";
+import { NAVER_SEARCH_BASE, naverSearchHeaders } from "../../utils/naverSearch.js";
 
 const router = express.Router();
 
@@ -69,13 +70,12 @@ router.get("/place-details", async (req, res) => {
     if (!finalImg && name) {
       try {
         const naverImgRes = await axios.get(
-          `https://openapi.naver.com/v1/search/image?query=${encodeURIComponent(
+          `${NAVER_SEARCH_BASE}/image?query=${encodeURIComponent(
             name
           )}&display=1`,
           {
             headers: {
-              "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID,
-              "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET,
+              ...naverSearchHeaders(),
             },
           }
         );

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { searchGoogleDetails } from "../apis/googlePlace.js";
+import { NAVER_SEARCH_BASE, naverSearchHeaders } from "../utils/naverSearch.js";
 
 // 장소 제목과 좌표를 받아서 이미지를 보강하는 함수
 export async function enhanceImage(title, lat, lng) {
@@ -13,13 +14,12 @@ export async function enhanceImage(title, lat, lng) {
 
     // 2) 그래도 없으면 Naver 이미지 검색
     const naverRes = await axios.get(
-      `https://openapi.naver.com/v1/search/image?query=${encodeURIComponent(
+      `${NAVER_SEARCH_BASE}/image?query=${encodeURIComponent(
         title
       )}&display=1`,
       {
         headers: {
-          "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET,
+          ...naverSearchHeaders(),
         },
       }
     );

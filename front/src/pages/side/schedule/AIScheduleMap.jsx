@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { NAVER_MAP_SCRIPT_URL } from "../../../config/naverMap";
 
 const DAY_COLORS = ["#0078ff", "#1ec800", "#ff3b30", "#ff9500", "#9b59b6"];
 const AIScheduleMap = ({
@@ -146,8 +147,7 @@ const AIScheduleMap = ({
 
     if (!window.naver) {
       const script = document.createElement("script");
-      script.src =
-        "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=1o7cfked5o";
+      script.src = NAVER_MAP_SCRIPT_URL;
       script.onload = initMap;
       document.head.appendChild(script);
     } else {

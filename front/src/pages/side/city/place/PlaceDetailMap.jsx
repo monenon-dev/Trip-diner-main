@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { NAVER_MAP_SCRIPT_URL } from "../../../../config/naverMap";
 
 export default function PlaceDetailMap({ lat, lng, title }) {
   const mapRef = useRef(null);
@@ -26,8 +27,7 @@ export default function PlaceDetailMap({ lat, lng, title }) {
 
     if (!window.naver) {
       const script = document.createElement("script");
-      script.src =
-        "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=1o7cfked5o";
+      script.src = NAVER_MAP_SCRIPT_URL;
       script.onload = initMap;
       document.head.appendChild(script);
     } else {

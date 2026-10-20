@@ -1,8 +1,7 @@
 import { API_BASE } from "../../../../config/api";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
-const NAVER_KEY = process.env.REACT_APP_NAVER_MAP_KEY || "1o7cfked5o";
+import { NAVER_MAP_SCRIPT_URL } from "../../../../config/naverMap";
 
 // 네이버 지도 스크립트 로드 (중복 방지용)
 let naverMapScriptPromise = null;
@@ -20,7 +19,7 @@ function loadNaverMapScript() {
 
       const script = document.createElement("script");
       script.dataset.naverMap = "1";
-      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_KEY}`;
+      script.src = NAVER_MAP_SCRIPT_URL;
       script.onload = () => resolve(true);
       script.onerror = (e) => reject(new Error("NAVER_MAP_SCRIPT_LOAD_FAILED"));
       document.head.appendChild(script);

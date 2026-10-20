@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -45,7 +46,7 @@ export default function Signup() {
     }
 
     try {
-      await axios.post("http://localhost:4000/api/auth/register", {
+      await axios.post(`${API_BASE}/auth/register`, {
         name,
         email,
         password,

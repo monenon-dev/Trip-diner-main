@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../../config/api";
 import React, {
   useState,
   useEffect,
@@ -16,7 +17,6 @@ import EventList from "./event/EventList.jsx";
 import "../../../styles/side/city/CityMain.css";
 import useCityWeather from "../../../hooks/useCityWeather.js";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
 
 const stripHtml = (html) => {
   if (!html) return "";
@@ -350,7 +350,7 @@ export default function CityMain({ user, setUser }) {
                   const imgSrc = firstImg
                     ? firstImg.startsWith("http")
                       ? firstImg
-                      : `http://localhost:4000${firstImg}`
+                      : `${SERVER_URL}${firstImg}`
                     : `https://picsum.photos/400/300?random=${pid}`;
 
                   return (

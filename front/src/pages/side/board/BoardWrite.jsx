@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import QuillEditor from "./TiptapEditor";
@@ -35,7 +36,7 @@ export default function BoardWrite() {
       const token = localStorage.getItem("accessToken");
       if (!token) return;
 
-      const res = await axios.get("http://localhost:4000/api/plan", {
+      const res = await axios.get(`${API_BASE}/plan`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -73,7 +74,7 @@ export default function BoardWrite() {
   // 수정 모드일 때 기존 데이터 로드
   const loadPostData = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/posts/${id}`);
+      const res = await axios.get(`${API_BASE}/posts/${id}`);
       const post = res.data;
       setTitle(post.title);
       setCategory(post.category);
@@ -169,8 +170,8 @@ export default function BoardWrite() {
 
     try {
       const url = isEdit
-        ? `http://localhost:4000/api/posts/${id}`
-        : "http://localhost:4000/api/posts";
+        ? `${API_BASE}/posts/${id}`
+        : `${API_BASE}/posts`;
       await axios[isEdit ? "put" : "post"](url, postData);
       Swal.fire("성공", "저장되었습니다.", "success").then(() =>
         navigate("/board")

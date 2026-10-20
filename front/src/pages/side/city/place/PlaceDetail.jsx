@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../../config/api";
 import React, {
   useEffect,
   useMemo,
@@ -16,7 +17,6 @@ import PlaceDetailMap from "./PlaceDetailMap";
 
 import "../../../../styles/side/city/PlaceDetail.css";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
 
 export default function PlaceDetail({ user, setUser }) {
   const { id } = useParams();

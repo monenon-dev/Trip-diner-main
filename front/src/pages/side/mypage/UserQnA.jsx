@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 // src/pages/side/mypage/UserQnA.jsx
 
 import { useEffect, useState } from "react";
@@ -27,7 +28,7 @@ export default function UserQnA() {
       const token = localStorage.getItem("accessToken");
 
       await axios.post(
-        "http://localhost:4000/api/qna",
+        `${API_BASE}/qna`,
         { title, content },
         {
           headers: { Authorization: `Bearer ${token}` },

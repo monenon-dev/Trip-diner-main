@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../../styles/side/mypage/UserQnAList.css";
@@ -12,7 +13,7 @@ export default function UserQnAList() {
       try {
         const token = localStorage.getItem("accessToken");
 
-        const res = await axios.get("http://localhost:4000/api/qna/my", {
+        const res = await axios.get(`${API_BASE}/qna/my`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -37,7 +38,7 @@ export default function UserQnAList() {
     try {
       const token = localStorage.getItem("accessToken");
 
-      const res = await axios.get(`http://localhost:4000/api/qna/${id}`, {
+      const res = await axios.get(`${API_BASE}/qna/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });

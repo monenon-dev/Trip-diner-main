@@ -1,8 +1,8 @@
+import { API_BASE } from "../../../../config/api";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const API_BASE = "http://localhost:4000/api";
 
 const StepDistrictSelect = ({
   selectedCity,

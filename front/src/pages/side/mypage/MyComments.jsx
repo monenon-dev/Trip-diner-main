@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +22,7 @@ export default function MyComments() {
     if (!user_id) return;
 
     axios
-      .get(`http://localhost:4000/api/comment/user/${user_id}`)
+      .get(`${API_BASE}/comment/user/${user_id}`)
       .then((res) => setComments(Array.isArray(res.data) ? res.data : []))
       .catch((err) => console.error("내 댓글 불러오기 실패:", err));
   }, [user_id]);

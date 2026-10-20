@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../config/api";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/admin/AdminPosts.css";
@@ -14,7 +15,7 @@ export default function AdminPosts() {
   const totalPages = Math.ceil(posts.length / perPage);
 
   const fetchPosts = async () => {
-    const res = await axios.get("http://localhost:4000/api/admin/posts");
+    const res = await axios.get(`${API_BASE}/admin/posts`);
     setPosts(res.data);
   };
 
@@ -24,14 +25,14 @@ export default function AdminPosts() {
 
   const handleDelete = async (postId) => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
-    await axios.patch(`http://localhost:4000/api/admin/posts/${postId}/delete`);
+    await axios.patch(`${API_BASE}/admin/posts/${postId}/delete`);
     fetchPosts();
   };
 
   const handleRestore = async (postId) => {
     if (!window.confirm("이 게시글을 복구하시겠습니까?")) return;
     await axios.patch(
-      `http://localhost:4000/api/admin/posts/${postId}/restore`
+      `${API_BASE}/admin/posts/${postId}/restore`
     );
     fetchPosts();
   };
@@ -42,7 +43,7 @@ export default function AdminPosts() {
       return;
     }
 
-    const res = await axios.get(`http://localhost:4000/api/posts/${postId}`);
+    const res = await axios.get(`${API_BASE}/posts/${postId}`);
     setSelectedPost(res.data);
   };
 
@@ -155,7 +156,7 @@ export default function AdminPosts() {
 
               {selectedPost.image_url && (
                 <img
-                  src={`http://localhost:4000${selectedPost.image_url}`}
+                  src={`${SERVER_URL}${selectedPost.image_url}`}
                   alt="게시글 이미지"
                   style={{
                     maxWidth: "350px",

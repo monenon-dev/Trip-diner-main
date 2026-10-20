@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -6,7 +7,6 @@ import "../../../styles/side/schedule/AIScheduleSummary.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const API_BASE = "http://localhost:4000/api";
 
 const CATEGORY_LABELS = {
   restaurant: "음식점",

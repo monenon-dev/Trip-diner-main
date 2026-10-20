@@ -1,6 +1,7 @@
+import { API_BASE } from "../../config/api";
 import axios from "axios";
 
-const API = "http://localhost:4000/api/auth";
+const API = `${API_BASE}/auth`;
 
 export const requestResetEmail = (email) => {
   return axios.post(`${API}/forgot-password`, { email });

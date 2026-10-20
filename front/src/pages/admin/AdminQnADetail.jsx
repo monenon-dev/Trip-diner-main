@@ -1,8 +1,9 @@
+import { API_BASE } from "../../config/api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const API = "http://localhost:4000/api";
+const API = `${API_BASE}`;
 
 export default function AdminQnADetail() {
   const { id } = useParams();

@@ -1,9 +1,9 @@
+import { API_BASE } from "../../../config/api";
 import React, { useEffect, useMemo, useState } from "react";
 import CityListItem from "./CityListItem";
 import axios from "axios";
 import "../../../styles/side/city/CityList.css";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
 
 const _placeCache = new Map();
 const PLACE_TTL = 5 * 60 * 1000;

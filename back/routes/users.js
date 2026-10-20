@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import prisma from "../prisma/prismaClient.js";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import { cookieSecurity, getFrontendUrl } from "../utils/deployConfig.js";
 
 const router = express.Router();
 
@@ -93,8 +94,7 @@ router.post("/login-old", async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      ...cookieSecurity(),
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -167,7 +167,7 @@ router.post("/forgot-password", async (req, res) => {
     { expiresIn: "2h" }
   );
 
-  const resetLink = `http://localhost:3000/reset-password?token=${encodeURIComponent(
+  const resetLink = `${getFrontendUrl()}/reset-password?token=${encodeURIComponent(
     token
   )}`;
 

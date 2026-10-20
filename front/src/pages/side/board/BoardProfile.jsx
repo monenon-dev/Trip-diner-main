@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../../config/api";
 import React, { useRef, useState, useEffect } from "react";
 import "../../../styles/side/board/Board.css";
 
@@ -8,7 +9,7 @@ export default function BoardProfile({ user, setUser }) {
 
   useEffect(() => {
     if (user?.profile_img) {
-      const fullUrl = `http://localhost:4000${user.profile_img}`;
+      const fullUrl = `${SERVER_URL}${user.profile_img}`;
       setProfileImg(fullUrl);
     }
   }, [user]);
@@ -25,7 +26,7 @@ export default function BoardProfile({ user, setUser }) {
     formData.append("profile", file);
     formData.append("userId", user.user_id);
 
-    const res = await fetch("http://localhost:4000/api/profile/upload", {
+    const res = await fetch(`${API_BASE}/profile/upload`, {
       method: "POST",
       body: formData,
     });
@@ -36,7 +37,7 @@ export default function BoardProfile({ user, setUser }) {
       return;
     }
 
-    const fullUrl = `http://localhost:4000${data.imageUrl}`;
+    const fullUrl = `${SERVER_URL}${data.imageUrl}`;
     setProfileImg(fullUrl);
 
     const updatedUser = { ...user, profile_img: data.imageUrl };
@@ -47,7 +48,7 @@ export default function BoardProfile({ user, setUser }) {
   return (
     <div className="profile-box" onClick={handleProfileClick}>
       <img
-        src={profileImg || "http://localhost:4000/profile.png"}
+        src={profileImg || `${SERVER_URL}/profile.png`}
         alt="profile"
         className="profile-img"
       />

@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../../config/api";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +7,6 @@ import Header from "../../../components/home/Header.jsx";
 import SideMenu from "../../../components/home/SideMenu.jsx";
 import "../../../styles/side/mypage/Likeposts.css";
 
-const API_BASE = "http://localhost:4000/api";
 
 export default function LikePosts({ userId: userIdProp }) {
   const navigate = useNavigate();
@@ -113,7 +113,7 @@ export default function LikePosts({ userId: userIdProp }) {
                       <img
                         src={
                           item.post?.image_url
-                            ? `http://localhost:4000${item.post.image_url}`
+                            ? `${SERVER_URL}${item.post.image_url}`
                             : getFirstImage(item.post?.content)
                         }
                         className="like-img"

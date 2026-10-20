@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../../config/api";
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/side/mypage/Profile.css";
@@ -99,7 +100,7 @@ export default function Profile({ user, setUser }) {
 
     const finalUrl = user.profile_img.startsWith("http")
       ? user.profile_img
-      : `http://localhost:4000${user.profile_img}`;
+      : `${SERVER_URL}${user.profile_img}`;
 
     setProfileImg(finalUrl);
   }, [user]);
@@ -115,7 +116,7 @@ export default function Profile({ user, setUser }) {
       formData.append("profile", file);
       formData.append("userId", user.user_id);
 
-      const res = await fetch("http://localhost:4000/api/profile/upload", {
+      const res = await fetch(`${API_BASE}/profile/upload`, {
         method: "POST",
         body: formData,
       });
@@ -126,7 +127,7 @@ export default function Profile({ user, setUser }) {
         return;
       }
 
-      const fullUrl = `http://localhost:4000${data.imageUrl}`;
+      const fullUrl = `${SERVER_URL}${data.imageUrl}`;
       setProfileImg(fullUrl);
 
       const updatedUser = {
@@ -152,7 +153,7 @@ export default function Profile({ user, setUser }) {
         <div className="profile-left">
           <div className="profile-photo-box" onClick={handleProfileClick}>
             <img
-              src={profileImg || "http://localhost:4000/profile.png"}
+              src={profileImg || `${SERVER_URL}/profile.png`}
               className="profile-photo"
               alt="profile"
             />

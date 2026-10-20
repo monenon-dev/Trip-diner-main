@@ -1,5 +1,6 @@
 import express from "express";
 import fetch from "node-fetch";
+import { resolveOrigin } from "../../utils/deployConfig.js";
 
 const router = express.Router();
 
@@ -53,7 +54,8 @@ router.get("/image", async (req, res) => {
     res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", "public, max-age=86400");
 
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.setHeader("Access-Control-Allow-Origin", resolveOrigin(req.headers.origin));
+    res.setHeader("Vary", "Origin");
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
 
     res.send(buf);

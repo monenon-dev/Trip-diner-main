@@ -1,3 +1,4 @@
+import { API_BASE } from "../../config/api";
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -13,7 +14,7 @@ export default function AdminLogin() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:4000/api/admin/login", {
+      const res = await axios.post(`${API_BASE}/admin/login`, {
         email,
         password,
       });

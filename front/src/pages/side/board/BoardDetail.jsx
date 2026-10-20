@@ -1,3 +1,4 @@
+import { API_BASE, SERVER_URL } from "../../../config/api";
 import React, {
   useEffect,
   useState,
@@ -10,7 +11,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import "../../../styles/side/board/BoardDetail.css";
 
-const API_BASE = "http://localhost:4000/api";
 
 export default function BoardDetail() {
   const { id } = useParams();
@@ -136,7 +136,7 @@ export default function BoardDetail() {
         <img
           src={
             comment.user?.profile_img
-              ? `http://localhost:4000${comment.user.profile_img}`
+              ? `${SERVER_URL}${comment.user.profile_img}`
               : "/default_profile.png"
           }
           className="comment-profile"
@@ -188,7 +188,7 @@ export default function BoardDetail() {
               <img
                 src={
                   post.user?.profile_img
-                    ? `http://localhost:4000${post.user.profile_img}`
+                    ? `${SERVER_URL}${post.user.profile_img}`
                     : "/default_profile.png"
                 }
                 className="meta-profile-img"

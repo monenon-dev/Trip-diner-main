@@ -1,9 +1,9 @@
+import { API_BASE } from "../../../../config/api";
 import React from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:4000/api";
 const themesList = [
   "산",
   "실내여행지",

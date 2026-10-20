@@ -1,7 +1,7 @@
+import { API_BASE } from "../../../../config/api";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
 const NAVER_KEY = process.env.REACT_APP_NAVER_MAP_KEY || "1o7cfked5o";
 
 // 네이버 지도 스크립트 로드 (중복 방지용)

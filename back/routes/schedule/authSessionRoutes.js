@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import prisma from "../../prisma/prismaClient.js";
+import { cookieSecurity } from "../../utils/deployConfig.js";
 
 const router = express.Router();
 
@@ -18,8 +19,7 @@ const signAccess = (user) =>
 const setRefreshCookie = (res, token) => {
   res.cookie("refresh_token", token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    ...cookieSecurity(),
     path: "/",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
@@ -157,8 +157,7 @@ router.post("/logout", async (req, res) => {
 
     res.clearCookie("refresh_token", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      ...cookieSecurity(),
       path: "/",
     });
 

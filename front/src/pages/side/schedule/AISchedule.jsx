@@ -1,9 +1,9 @@
+import { API_BASE } from "../../../config/api";
 import React, { useState, useEffect } from "react";
 import api from "../../page/login/api";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/side/schedule/AISchedule.css";
 
-const API_BASE = "http://localhost:4000/api";
 
 const AISchedule = ({ userId = 1 }) => {
   const navigate = useNavigate();

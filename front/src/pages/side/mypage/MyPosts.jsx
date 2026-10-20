@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ export default function MyPosts() {
     if (!user_id) return;
 
     axios
-      .get(`http://localhost:4000/api/posts/user/${user_id}`)
+      .get(`${API_BASE}/posts/user/${user_id}`)
       .then((res) => setPosts(Array.isArray(res.data) ? res.data : []))
       .catch((err) => console.error("내 글 불러오기 실패:", err));
   }, [user_id]);

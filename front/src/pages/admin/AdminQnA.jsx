@@ -1,3 +1,4 @@
+import { API_BASE } from "../../config/api";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +13,7 @@ export default function AdminQna() {
     try {
       const token = localStorage.getItem("adminToken");
 
-      const res = await axios.get("http://localhost:4000/api/admin/qna", {
+      const res = await axios.get(`${API_BASE}/admin/qna`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

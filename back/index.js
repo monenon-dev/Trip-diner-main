@@ -51,6 +51,7 @@ import naverSearchRouter from "./routes/schedule/naverSearch.js";
 import adminRouter from "./routes/admin/admin.js";
 import adminLoginRouter from "./routes/admin/adminLogin.js";
 import adminQnaRouter from "./routes/admin/adminQnA.js";
+import { getAllowedOrigins, resolveOrigin } from "./utils/deployConfig.js";
 
 const app = express();
 
@@ -74,7 +75,7 @@ app.use(cookieParser());
 // CORS 설정
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: getAllowedOrigins(),
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
@@ -84,7 +85,8 @@ app.use(
 app.use(
   "/uploads",
   (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.setHeader("Access-Control-Allow-Origin", resolveOrigin(req.headers.origin));
+    res.setHeader("Vary", "Origin");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     next();

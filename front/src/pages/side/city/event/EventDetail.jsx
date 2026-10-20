@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../../config/api";
 import React, {
   useEffect,
   useMemo,
@@ -13,7 +14,6 @@ import SideMenu from "../../../../components/home/SideMenu.jsx";
 import EventDetailMap from "./EventDetailMap";
 import "../../../../styles/side/city/event/EventDetail.css";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
 const CACHE_TTL_SUCCESS = 6 * 60 * 60 * 1000;
 const CACHE_TTL_FALLBACK = 30 * 1000;
 

@@ -1,3 +1,4 @@
+import { API_BASE } from "../../../config/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,7 +12,7 @@ export default function UserQnADetail() {
       try {
         const token = localStorage.getItem("accessToken");
 
-        const res = await axios.get(`http://localhost:4000/api/qna/${id}`, {
+        const res = await axios.get(`${API_BASE}/qna/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

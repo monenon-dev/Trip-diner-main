@@ -8,10 +8,13 @@
 
 
 .hero-img {
+  display: block;
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  transform: scale(1.03);
+  /* 위쪽 기준으로 확대해 하단 우측 워터마크(영상 높이 93% 지점부터)를 잘라냄 */
+  transform-origin: 50% 0;
+  transform: scale(1.1);
   filter: contrast(1.02) saturate(1.05);
 }
 
@@ -54,7 +57,7 @@
   will-change: opacity, transform;
 }
 
-.hero-content.show {
+.hero.entered .hero-content.show {
   opacity: 1;
 }
 
@@ -70,7 +73,7 @@
   transition: opacity 1s ease-out 0.18s, transform 1s ease-out 0.18s;
 }
 
-.hero-content.show .hero-title {
+.hero.entered .hero-content.show .hero-title {
   opacity: 1;
   transform: translateY(0);
 }
@@ -88,7 +91,7 @@
   transition: opacity 1.1s ease-out 0.42s, transform 1.1s ease-out 0.42s;
 }
 
-.hero-content.show .hero-desc {
+.hero.entered .hero-content.show .hero-desc {
   opacity: 1;
   transform: translateY(0);
 }
@@ -104,7 +107,7 @@
   transition: opacity 1.05s ease-out 0.62s, transform 1.05s ease-out 0.62s;
 }
 
-.hero-content.show .hero-actions {
+.hero.entered .hero-content.show .hero-actions {
   opacity: 1;
   transform: translateY(0);
 }

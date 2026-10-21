@@ -192,8 +192,140 @@
   padding: 46px 44px;
 }
 
+/* ===== 페이지 넘김 ===== */
+.menu-pages{
+  perspective: 2600px;
+}
+
+.menu-flip{
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  right: 12px;
+  /* 오른쪽 페이지와 같은 크기 (좌우 padding 24px + gap 14px) */
+  width: calc((100% - 38px) / 2);
+  z-index: 3;
+  pointer-events: none;
+
+  /* 가운데 책등(gap 14px의 중앙)을 축으로 넘어감 */
+  transform-origin: -7px 50%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+}
+
+.section-box.show .menu-flip{
+  animation: menu-page-turn 1.5s cubic-bezier(0.55, 0.08, 0.25, 1) 0.45s forwards;
+}
+
+/* opacity를 .menu-flip에 주면 preserve-3d가 풀려 뒷면에 앞면 글자가 거울처럼 비침
+   → 넘어간 뒤 사라지는 효과는 각 면(.menu-flip-face)에 따로 줌 */
+.section-box.show .menu-flip-face{
+  animation: menu-page-fade 1.5s linear 0.45s forwards;
+}
+
+@keyframes menu-page-turn{
+  0%   { transform: rotateY(0deg); }
+  80%  { transform: rotateY(-168deg); }
+  100% { transform: rotateY(-180deg); }
+}
+
+@keyframes menu-page-fade{
+  0%, 80% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+
+.menu-flip-face{
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.menu-flip-face--front{
+  transform: rotateY(0deg);
+}
+
+/* 앞면: 종이 한 장 (책등 쪽이 살짝 어둡게 말려 보이게) */
+.menu-flip-face--front{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background-image:
+    linear-gradient(90deg, rgba(60,40,25,0.20), rgba(60,40,25,0) 14%),
+    linear-gradient(rgba(255,255,255,0.42), rgba(255,255,255,0.42)),
+    url("/public/assets/textures/main_paper.jpg");
+  background-size: cover;
+  background-blend-mode: normal, soft-light, normal;
+  border: 1px solid rgba(0,0,0,0.10);
+  box-shadow: -10px 0 22px rgba(0,0,0,0.10);
+}
+
+/* 뒷면: 넘어가는 동안 보이는 종이 뒷장 */
+.menu-flip-face--back{
+  transform: rotateY(180deg);
+  background-image:
+    linear-gradient(270deg, rgba(60,40,25,0.22), rgba(60,40,25,0) 16%),
+    linear-gradient(rgba(255,255,255,0.30), rgba(255,255,255,0.30)),
+    url("/public/assets/textures/main_paper.jpg");
+  background-size: cover;
+  background-blend-mode: normal, soft-light, normal;
+  border: 1px solid rgba(0,0,0,0.10);
+}
+
+.menu-flip-mark{
+  font-family: "Playfair Display", "Noto Serif KR", serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: rgba(70, 48, 32, 0.55);
+}
+
+.menu-flip-sub{
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  margin-right: -0.5em;
+  color: rgba(70, 48, 32, 0.45);
+}
+
+/* 첫 메뉴판은 히어로에서 들고 있던 메뉴판의 가죽 표지가 열리는 느낌 */
+.home-sections > .menu-section:first-child .menu-flip-face--front{
+  background:
+    radial-gradient(600px 400px at 30% 20%, rgba(255,255,255,0.10), rgba(0,0,0,0) 60%),
+    linear-gradient(135deg, #4a3428 0%, #2a1c15 55%, #17100c 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow:
+    inset 0 0 0 10px rgba(0,0,0,0.18),
+    inset 0 0 0 11px rgba(214, 170, 100, 0.45),
+    -12px 0 26px rgba(0,0,0,0.28);
+}
+
+.home-sections > .menu-section:first-child .menu-flip-mark{
+  font-size: 40px;
+  color: rgba(232, 196, 130, 0.92);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.home-sections > .menu-section:first-child .menu-flip-sub{
+  color: rgba(232, 196, 130, 0.75);
+}
+
+.home-sections > .menu-section:first-child .menu-flip-face--back{
+  background: linear-gradient(270deg, #2a1c15 0%, #3b2a20 100%);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .menu-flip{ display: none; }
+}
+
 @media (max-width: 980px){
   .menu-pages{ flex-direction: column; }
   .menu-pages::before{ display:none; }
   .menu-page{ padding: 46px 34px; }
+  /* 페이지가 위아래로 쌓이는 화면에서는 넘김 효과 없이 기존 페이드만 */
+  .menu-flip{ display: none; }
 }

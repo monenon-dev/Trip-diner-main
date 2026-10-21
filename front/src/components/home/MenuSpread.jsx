@@ -32,6 +32,15 @@ export default function MenuSpread({
             {rightLabel && <div className="menu-page-label">{rightLabel}</div>}
             {right}
           </div>
+
+          {/* 화면에 들어올 때 오른쪽 페이지를 덮고 있다가 왼쪽으로 넘어가는 장 */}
+          <div className="menu-flip" aria-hidden="true">
+            <div className="menu-flip-face menu-flip-face--front">
+              <span className="menu-flip-mark">Trip · Diner</span>
+              <span className="menu-flip-sub">MENU</span>
+            </div>
+            <div className="menu-flip-face menu-flip-face--back" />
+          </div>
         </div>
       </div>
     </section>

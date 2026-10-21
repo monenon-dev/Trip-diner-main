@@ -82,8 +82,13 @@ export default function Hero({ heroRef }) {
         aria-label="아래로 스크롤"
       >
         <span className="hero-scroll-text">SCROLL</span>
-        <span className="hero-scroll-mouse" aria-hidden="true">
-          <span className="hero-scroll-wheel" />
+        <span className="hero-scroll-arrows" aria-hidden="true">
+          <svg viewBox="0 0 24 14" className="hero-scroll-arrow">
+            <path d="M2 2l10 10L22 2" />
+          </svg>
+          <svg viewBox="0 0 24 14" className="hero-scroll-arrow">
+            <path d="M2 2l10 10L22 2" />
+          </svg>
         </span>
       </button>
     </section>

@@ -103,87 +103,8 @@
   transform: translateY(0);
 }
 
-.hero-scroll {
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: rgba(255, 245, 232, 0.78);
-  transform: translateX(-50%);
-  /* 영상 아래쪽 하얀 식탁보 위에서도 보이게 */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
-
-  /* 영상 재생 중에도 바로 보이게 (문구 등장과 별개) */
-  animation: hero-scroll-in 1s ease-out 1s both;
-}
-
-@keyframes hero-scroll-in {
-  from { opacity: 0; transform: translate(-50%, 12px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
-}
-
-.hero-scroll:hover {
-  color: rgba(255, 248, 236, 1);
-}
-
-.hero-scroll-text {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  /* letter-spacing이 오른쪽에만 붙어 생기는 쏠림 보정 */
-  margin-right: -0.28em;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-
-.hero-scroll-arrows {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: -2px;
-  animation: hero-scroll-bounce 2s ease-in-out infinite;
-}
-
-.hero-scroll-arrow {
-  display: block;
-  width: 16px;
-  height: 9px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  animation: hero-scroll-arrow 2s ease-in-out infinite;
-}
-
-/* 두 번째 화살표가 조금 늦게 켜져서 아래로 흐르는 느낌 */
-.hero-scroll-arrow + .hero-scroll-arrow {
-  margin-top: -3px;
-  animation-delay: 0.25s;
-}
-
-@keyframes hero-scroll-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(5px); }
-}
-
-@keyframes hero-scroll-arrow {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 1; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .hero.entered .hero-content.show,
-  .hero-scroll,
-  .hero-scroll-arrows,
-  .hero-scroll-arrow {
+  .hero.entered .hero-content.show {
     animation: none;
   }
 }
@@ -208,14 +129,5 @@
   /* 360px 폭에서도 "보는 순간 설레는"이 한 줄에 들어가게 */
   .hero-title { font-size: clamp(28px, 8.5vw, 52px); }
   .hero-desc { font-size: 15px; }
-  .hero-scroll { bottom: 20px; }
 }
 
-/* 모바일 브라우저 주소창에 가려지지 않게 (100vh가 실제 보이는 높이보다 클 때) */
-@supports (height: 100svh) {
-  .hero-scroll { bottom: calc(32px + 100vh - 100svh); }
-
-  @media (max-width: 520px) {
-    .hero-scroll { bottom: calc(20px + 100vh - 100svh); }
-  }
-}

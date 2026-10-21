@@ -35,12 +35,6 @@ export default function Hero({ heroRef }) {
   // 영상을 못 불러오거나 자동재생이 막혀도 텍스트는 보이게
   const showText = () => setEntered(true);
 
-  const scrollToSections = () => {
-    document
-      .getElementById("home-sections")
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section className={`hero ${entered ? "entered" : ""}`}>
       <video
@@ -74,23 +68,6 @@ export default function Hero({ heroRef }) {
           <br /> Trip-Diner와 함께 특별한 여행을 시작하세요
         </p>
       </div>
-
-      <button
-        type="button"
-        className="hero-scroll"
-        onClick={scrollToSections}
-        aria-label="아래로 스크롤"
-      >
-        <span className="hero-scroll-text">SCROLL</span>
-        <span className="hero-scroll-arrows" aria-hidden="true">
-          <svg viewBox="0 0 24 14" className="hero-scroll-arrow">
-            <path d="M2 2l10 10L22 2" />
-          </svg>
-          <svg viewBox="0 0 24 14" className="hero-scroll-arrow">
-            <path d="M2 2l10 10L22 2" />
-          </svg>
-        </span>
-      </button>
     </section>
   );
 }

@@ -53,24 +53,27 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="home-wrapper">
-      <Hero heroRef={heroRef} />
+    <div className={`home-wrapper ${isBook ? "is-book" : ""}`}>
+      {/* 메뉴판 모드에선 히어로가 이 안에서 고정되고, 메뉴판이 그 위로 올라옴 */}
+      <div className="home-stack">
+        <Hero heroRef={heroRef} />
 
-      <main id="home-sections" className="home-sections">
-        {isBook ? (
-          <MenuBook>
-            <Section1 />
-            <Section2 />
-            <Section3 />
-          </MenuBook>
-        ) : (
-          <>
-            <Section1 sectionRef={(el) => (sectionsRef.current[0] = el)} />
-            <Section2 sectionRef={(el) => (sectionsRef.current[1] = el)} />
-            <Section3 sectionRef={(el) => (sectionsRef.current[2] = el)} />
-          </>
-        )}
-      </main>
+        <main id="home-sections" className="home-sections">
+          {isBook ? (
+            <MenuBook>
+              <Section1 />
+              <Section2 />
+              <Section3 />
+            </MenuBook>
+          ) : (
+            <>
+              <Section1 sectionRef={(el) => (sectionsRef.current[0] = el)} />
+              <Section2 sectionRef={(el) => (sectionsRef.current[1] = el)} />
+              <Section3 sectionRef={(el) => (sectionsRef.current[2] = el)} />
+            </>
+          )}
+        </main>
+      </div>
 
       <Footer />
     </div>

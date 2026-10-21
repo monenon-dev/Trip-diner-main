@@ -38,14 +38,19 @@ export default function MenuBook({ children }) {
   useLayoutEffect(() => setReady(true), []);
 
   useEffect(() => {
+    const stack = rootRef.current?.closest(".home-stack");
+
     const onScroll = () => {
       const el = rootRef.current;
       if (!el) return;
+      const top = el.getBoundingClientRect().top;
+
+      // 메뉴판이 화면 아래에서 올라오는 정도(0~1) → 뒤의 히어로 영상을 그만큼 어둡게
+      const arrive = Math.min(1, Math.max(0, 1 - top / window.innerHeight));
+      stack?.style.setProperty("--book-arrive", arrive.toFixed(3));
+
       const scrollable = el.offsetHeight - window.innerHeight;
-      const progress = Math.min(
-        1,
-        Math.max(0, -el.getBoundingClientRect().top / scrollable)
-      );
+      const progress = Math.min(1, Math.max(0, -top / scrollable));
       const next =
         progress < CLOSED_UNTIL
           ? 0
@@ -62,6 +67,7 @@ export default function MenuBook({ children }) {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      stack?.style.removeProperty("--book-arrive");
     };
   }, [count]);
 

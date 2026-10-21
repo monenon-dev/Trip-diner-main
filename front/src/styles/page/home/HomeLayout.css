@@ -32,6 +32,26 @@ html, body {
   padding-top: 10px;
 }
 
+/* ===== 메뉴판 모드(데스크톱): 히어로를 고정하고 그 위로 메뉴판이 올라옴 ===== */
+.home-wrapper.is-book .hero {
+  position: sticky;
+  top: 0;
+  /* MenuBook이 --book-arrive(0~1)를 넣어줌: 메뉴판이 올라올수록 영상이 어두워짐 */
+  filter: brightness(calc(1 - var(--book-arrive, 0) * 0.6));
+}
+
+/* 메뉴판이 반쯤 올라오기 전에 히어로 문구·스크롤 화살표는 사라지게
+   (opacity는 등장 애니메이션이 쓰고 있어서 filter로 따로 줄임) */
+.home-wrapper.is-book .hero-content,
+.home-wrapper.is-book .hero-scroll {
+  filter: opacity(clamp(0, calc(1 - var(--book-arrive, 0) * 1.8), 1));
+}
+
+.home-wrapper.is-book .home-sections {
+  z-index: 2;
+  padding-top: 0;
+}
+
 .section-box {
   width: 100%;
   max-width: 1180px;

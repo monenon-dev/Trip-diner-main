@@ -15,15 +15,19 @@ export const BookSlotContext = createContext(null);
 // 스크롤 진행도(0~1) 중 이 구간까지는 닫힌 표지만 보여줌
 const CLOSED_UNTIL = 0.06;
 
+// MenuBook.css의 --flip 시간(0.9s)보다 조금 길게: 넘김이 끝난 뒤 정지 상태로 전환
+const SETTLE_MS = 950;
+
 /**
  * 스크롤하면 넘어가는 메뉴판 한 권
  * - 처음엔 닫힌 표지 → 열리면 children[0] 펼침 → 페이지가 넘어가며 children[1], [2] ...
+ *   → 마지막 펼침 다음엔 뒤표지가 덮이며 닫힘
  * - children: MenuSpread를 렌더하는 섹션 컴포넌트들
  *
  * 장(leaf) 구성: 오른쪽 절반에 쌓여 있다가 책등을 축으로 왼쪽으로 넘어감
- *   leaf 0 = 표지      (앞: 표지,                  뒤: 펼침0 왼쪽)
- *   leaf j = 종이 한 장 (앞: 펼침 j-1 오른쪽,       뒤: 펼침 j 왼쪽)
- *   바닥판            (마지막 펼침 오른쪽)
+ *   leaf 0     = 표지      (앞: 표지,                  뒤: 펼침0 왼쪽)
+ *   leaf j     = 종이 한 장 (앞: 펼침 j-1 오른쪽,       뒤: 펼침 j 왼쪽)
+ *   leaf count = 뒤표지    (앞: 마지막 펼침 오른쪽,     뒤: 뒤표지 바깥)
  */
 export default function MenuBook({ children }) {
   const spreads = Children.toArray(children);
@@ -32,10 +36,18 @@ export default function MenuBook({ children }) {
   const rootRef = useRef(null);
   const slotRefs = useRef({});
   const [ready, setReady] = useState(false);
-  // 0 = 닫힘, k = k번째 펼침(1부터)
+  // 0 = 닫힘(앞표지), k = k번째 펼침(1부터), count + 1 = 닫힘(뒤표지)
   const [step, setStep] = useState(0);
+  // 넘김이 끝나 멈춰 있는 상태: 3D 쌓기(translateZ)를 풀어 글씨가 번지지 않게 함
+  const [settled, setSettled] = useState(true);
 
   useLayoutEffect(() => setReady(true), []);
+
+  useEffect(() => {
+    setSettled(false);
+    const t = setTimeout(() => setSettled(true), SETTLE_MS);
+    return () => clearTimeout(t);
+  }, [step]);
 
   useEffect(() => {
     const stack = rootRef.current?.closest(".home-stack");
@@ -51,12 +63,16 @@ export default function MenuBook({ children }) {
 
       const scrollable = el.offsetHeight - window.innerHeight;
       const progress = Math.min(1, Math.max(0, -top / scrollable));
+      // 앞표지 이후 구간을 펼침 count개 + 뒤표지 닫힘 1개로 나눔
       const next =
         progress < CLOSED_UNTIL
           ? 0
           : Math.min(
-              count,
-              1 + Math.floor((progress - CLOSED_UNTIL) / ((1 - CLOSED_UNTIL) / count))
+              count + 1,
+              1 +
+                Math.floor(
+                  (progress - CLOSED_UNTIL) / ((1 - CLOSED_UNTIL) / (count + 1))
+                )
             );
       setStep(next);
     };
@@ -115,12 +131,14 @@ export default function MenuBook({ children }) {
   const leaves = [];
   for (let j = 0; j < count; j++) {
     const flipped = step > j;
+    // 지금 보이는 장: 왼쪽 맨 위(마지막으로 넘긴 장)와 오른쪽 맨 위(다음에 넘길 장)
+    const visible = j === step - 1 || j === step;
     leaves.push(
       <div
         key={j}
         className={`mbk-leaf ${j === 0 ? "mbk-leaf--cover" : ""} ${
           flipped ? "is-flipped" : ""
-        }`}
+        } ${visible ? "is-visible" : ""}`}
         style={{ "--z": `${count - j}px` }}
       >
         <div className="mbk-face mbk-face--front">
@@ -142,13 +160,27 @@ export default function MenuBook({ children }) {
     <div
       ref={rootRef}
       className="mbk"
-      style={{ "--mbk-spreads": count }}
+      style={{ "--mbk-steps": count + 1 }}
     >
       <div className="mbk-stage">
-        <div className={`mbk-book ${step > 0 ? "is-open" : ""}`}>
-          <div className="mbk-base">
-            <div className="mbk-board mbk-board--right" />
-            {paper(`r${count - 1}`, "right", count * 2, active(count - 1))}
+        <div
+          className={`mbk-book ${
+            step > count ? "is-back" : step > 0 ? "is-open" : ""
+          } ${settled ? "is-settled" : ""}`}
+        >
+          <div
+            className={`mbk-leaf mbk-leaf--back ${
+              step > count ? "is-flipped" : ""
+            } ${step >= count ? "is-visible" : ""}`}
+            style={{ "--z": "0px" }}
+          >
+            <div className="mbk-face mbk-face--front">
+              <div className="mbk-board mbk-board--right" />
+              {paper(`r${count - 1}`, "right", count * 2, active(count - 1))}
+            </div>
+            <div className="mbk-face mbk-face--back">
+              <BackCover />
+            </div>
           </div>
           {leaves}
         </div>
@@ -184,6 +216,20 @@ function Cover() {
         </div>
         <p className="mbk-cover-sub">MENU</p>
         <p className="mbk-cover-foot">보는 순간 설레는 여행 메뉴판</p>
+      </div>
+    </div>
+  );
+}
+
+function BackCover() {
+  return (
+    <div className="mbk-cover mbk-cover--back">
+      <div className="mbk-cover-inner">
+        <p className="mbk-cover-sub">BON VOYAGE</p>
+        <div className="mbk-cover-rule" aria-hidden="true">
+          <span />◆<span />
+        </div>
+        <p className="mbk-cover-foot">Trip · Diner와 함께 즐거운 여행 되세요</p>
       </div>
     </div>
   );

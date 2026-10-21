@@ -10,25 +10,36 @@
   --flip: 0.9s cubic-bezier(0.3, 0.85, 0.25, 1);
 
   position: relative;
-  /* 펼침 하나당 80vh씩 스크롤하면 한 장 넘어감 */
-  height: calc(100vh + var(--mbk-spreads) * 80vh);
+  /* 70vh씩 스크롤할 때마다 한 단계(열기 → 넘김 … → 뒤표지 닫기) */
+  height: calc(100vh + var(--mbk-steps) * 70vh);
 }
 
 .mbk-stage{
+  /* 세로로 긴 페이지 한 장의 크기 (3:4) */
+  --pw: min(calc((100vh - 68px - 72px) * 0.75), calc((100vw - 96px) / 2), 500px);
+  --ph: calc(var(--pw) * 4 / 3);
+
   position: sticky;
   top: 0;
   height: 100vh;
   box-sizing: border-box;
-  padding-top: 68px; /* 고정 헤더 높이 */
+  /* 고정 헤더(68px) 아래 남는 공간의 가운데 */
+  padding-top: calc(68px + (100vh - 68px - var(--ph)) / 2);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
+/* 6px 단위로 내려서 페이지 폭·높이·절반 이동값·위 여백이 모두 정수 px
+   → 글씨가 반 픽셀에 걸려 번지지 않게 (round() 미지원 브라우저는 위 값 사용) */
+@supports (width: round(down, 10px, 6px)){
+  .mbk-stage{
+    --pw: round(down, min(calc((100vh - 68px - 72px) * 0.75), calc((100vw - 96px) / 2), 500px), 6px);
+    padding-top: calc(68px + round(down, (100vh - 68px - var(--ph)) / 2, 1px));
+  }
+}
+
 .mbk-book{
-  /* 세로로 긴 페이지 한 장의 크기 (3:4) */
-  --pw: min(calc((100vh - 68px - 72px) * 0.75), calc((100vw - 96px) / 2), 500px);
-  --ph: calc(var(--pw) * 4 / 3);
 
   position: relative;
   width: calc(var(--pw) * 2);
@@ -49,8 +60,12 @@
   transform: translateX(0);
 }
 
+/* 뒤표지까지 덮이면 왼쪽 절반(뒤표지)이 화면 가운데 오도록 */
+.mbk-book.is-back{
+  transform: translateX(calc(var(--pw) * 0.5));
+}
+
 /* ----- 오른쪽 절반에 쌓이는 장과 바닥판 ----- */
-.mbk-base,
 .mbk-leaf{
   position: absolute;
   top: 0;
@@ -69,6 +84,21 @@
 
 .mbk-leaf.is-flipped{
   transform: rotateY(-180deg) translateZ(var(--z));
+}
+
+/* 넘김이 끝나 멈춰 있을 때: translateZ로 띄워 둔 장은 원근 때문에 살짝 확대돼 글씨가 번짐
+   → 띄움을 없애고, 지금 보이는 두 장 말고는 숨겨서 쌓는 순서가 필요 없게 함 */
+.mbk-book.is-settled .mbk-leaf{
+  transform: rotateY(0deg);
+  transition: none;
+}
+
+.mbk-book.is-settled .mbk-leaf.is-flipped{
+  transform: rotateY(-180deg);
+}
+
+.mbk-book.is-settled .mbk-leaf:not(.is-visible){
+  visibility: hidden;
 }
 
 .mbk-face{
@@ -199,6 +229,34 @@
   font-size: calc(var(--pw) * 0.028);
   letter-spacing: 0.08em;
   color: rgba(214, 170, 100, 0.6);
+}
+
+/* ----- 뒤표지 (책등이 오른쪽) ----- */
+.mbk-cover--back{
+  border-radius: 18px 4px 4px 18px;
+  box-shadow:
+    inset -8px 0 14px rgba(0,0,0,0.45),
+    inset 1px 0 0 rgba(255,255,255,0.06),
+    0 34px 70px rgba(0,0,0,0.42),
+    0 10px 22px rgba(0,0,0,0.25);
+}
+
+.mbk-cover--back::before{ inset: 14px 22px 14px 14px; }
+.mbk-cover--back::after{ inset: 30px 38px 30px 30px; }
+
+.mbk-cover--back .mbk-cover-inner{
+  padding-left: 0;
+  padding-right: 8px;
+}
+
+.mbk-cover--back .mbk-cover-sub{
+  font-family: "Playfair Display", serif;
+  font-size: calc(var(--pw) * 0.042);
+  color: var(--gold);
+}
+
+.mbk-cover--back .mbk-cover-foot{
+  margin-top: 0;
 }
 
 /* ----- 종이 페이지 ----- */

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../styles/page/home/HomeLayout.css";
-import { Footer, Hero, Section1, Section2, Section3 } from ".";
+import { Hero, Section1, Section2, Section3 } from ".";
 import MenuBook from "./MenuBook";
 
 // 이 폭 이상에서는 스크롤로 넘기는 메뉴판 한 권, 그보다 좁으면 섹션을 세로로 쌓음
@@ -74,8 +74,6 @@ export default function Home() {
           )}
         </main>
       </div>
-
-      <Footer />
     </div>
   );
 }

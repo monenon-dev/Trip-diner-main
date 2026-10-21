@@ -16,6 +16,11 @@
   transform-origin: 50% 0;
   transform: scale(1.1);
   filter: contrast(1.02) saturate(1.05);
+
+  /* 화면 아래 30%에서 영상이 투명해지며 뒤의 종이 배경(.home-wrapper)으로 녹아듦
+     scale(1.1)로 아래 9%가 잘려 있어서, 보이는 화면 기준 70%→100%가 되도록 63.6%→90.9% */
+  -webkit-mask-image: linear-gradient(to bottom, #000 63.6%, transparent 90.9%);
+  mask-image: linear-gradient(to bottom, #000 63.6%, transparent 90.9%);
 }
 
 .hero::after {
@@ -25,6 +30,9 @@
   background:
     linear-gradient(90deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.22) 52%, rgba(0,0,0,0.06) 100%),
     radial-gradient(900px 600px at 22% 50%, rgba(0,0,0,0.52), rgba(0,0,0,0) 60%);
+  /* 어두운 덮개도 영상과 같은 위치에서 함께 사라지게 */
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -115,10 +123,9 @@
   border: none;
   background: none;
   cursor: pointer;
-  color: rgba(255, 245, 232, 0.78);
+  /* 영상이 종이 배경으로 녹아드는 자리라 종이 위 글씨색(갈색)으로 */
+  color: rgba(90, 64, 44, 0.7);
   transform: translateX(-50%);
-  /* 영상 아래쪽 하얀 식탁보 위에서도 보이게 */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
 
   /* 영상 재생 중에도 바로 보이게 (문구 등장과 별개) */
   animation: hero-scroll-in 1s ease-out 1s both;
@@ -130,7 +137,7 @@
 }
 
 .hero-scroll:hover {
-  color: rgba(255, 248, 236, 1);
+  color: rgba(90, 64, 44, 1);
 }
 
 .hero-scroll-arrows {

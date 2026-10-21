@@ -238,3 +238,33 @@
   .city-section .city-card{ flex-direction: column; align-items: flex-start; }
   .city-section .city-thumbs img{ width: 86px; height: 62px; }
 }
+
+/* 세로 메뉴판 페이지처럼 폭이 좁을 때 (MenuSpread.css의 .menu-page 기준) */
+@container (max-width: 520px){
+  .city-section .s3-title{ font-size: 36px; }
+  .city-section .s3-right{ gap: 14px; }
+  .city-section .city-card{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .city-section .city-num{ top: 18px; }
+  .city-section .city-thumbs img{ width: 72px; height: 50px; }
+}
+
+@container (max-width: 400px){
+  .city-section .s3-title{ font-size: 32px; }
+  .city-section .city-row{ padding-left: 42px; }
+  .city-section .city-num{ width: 30px; height: 30px; }
+  .city-section .city-thumbs img{ width: 64px; height: 46px; }
+}
+
+@container (max-width: 320px){
+  .city-section .s3-title{ font-size: 28px; }
+  .city-section .city-row{ padding-left: 36px; }
+  .city-section .city-num{ width: 28px; height: 28px; font-size: 14px; }
+  .city-section .city-card{ padding: 12px; }
+  .city-section .city-thumbs{ gap: 6px; }
+  .city-section .city-thumbs img{ width: 56px; height: 42px; border-radius: 10px; }
+}

@@ -307,3 +307,17 @@
     height: 170px; 
   }
 }
+
+/* 세로 메뉴판 페이지처럼 폭이 좁을 때 (MenuSpread.css의 .menu-page 기준) */
+@container (max-width: 520px){
+  .schedule-section .s1-title{ font-size: 36px; }
+  .schedule-section .style-chips button{ padding: 9px 14px; }
+}
+
+@container (max-width: 400px){
+  .schedule-section .s1-title{ font-size: 32px; }
+}
+
+@container (max-width: 320px){
+  .schedule-section .s1-title{ font-size: 28px; }
+}

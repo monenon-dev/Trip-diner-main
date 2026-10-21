@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import "../../styles/page/home/Hero.css";
 
 // 영상이 끝나기 이 시간(초) 전에 텍스트를 보여줌
-const TEXT_LEAD_TIME = 1.5;
+// (약 15.1초 영상에서 메뉴판을 펼쳐 드는 13초 무렵에 맞춤)
+const TEXT_LEAD_TIME = 2.1;
 
 export default function Hero({ heroRef }) {
   const [entered, setEntered] = useState(false);
@@ -33,22 +34,6 @@ export default function Hero({ heroRef }) {
 
   // 영상을 못 불러오거나 자동재생이 막혀도 텍스트는 보이게
   const showText = () => setEntered(true);
-
-  const scrollToNext = () => {
-    const next =
-      document.querySelector("#home-sections") ||
-      document.querySelector(".home-sections");
-
-    if (!next) {
-      window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
-      return;
-    }
-
-    const OFFSET = 40;
-
-    const y = next.getBoundingClientRect().top + window.pageYOffset - OFFSET;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
 
   return (
     <section className={`hero ${entered ? "entered" : ""}`}>
@@ -82,12 +67,6 @@ export default function Hero({ heroRef }) {
           당신의 취향을 맛보고 만드는 여행 코스
           <br /> Trip-Diner와 함께 특별한 여행을 시작하세요
         </p>
-
-        <div className="hero-actions">
-          <button className="hero-cta" type="button" onClick={scrollToNext}>
-            메뉴 펼쳐보기
-          </button>
-        </div>
       </div>
     </section>
   );

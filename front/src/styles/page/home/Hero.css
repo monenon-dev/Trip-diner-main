@@ -96,58 +96,6 @@
   transform: translateY(0);
 }
 
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 22px;
-
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 1.05s ease-out 0.62s, transform 1.05s ease-out 0.62s;
-}
-
-.hero.entered .hero-content.show .hero-actions {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.hero-cta {
-  appearance: none;
-  border: none;
-  cursor: pointer;
-
-  padding: 12px 18px;
-  border-radius: 14px;
-
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: rgba(32, 22, 15, 0.92);
-
-  background: linear-gradient(180deg,
-    rgba(255, 232, 190, 0.95),
-    rgba(205, 145, 70, 0.92)
-  );
-
-  box-shadow:
-    0 18px 34px rgba(0,0,0,0.35),
-    inset 0 0 0 1px rgba(255, 232, 190, 0.35);
-
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-}
-
-.hero-cta:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.04);
-  box-shadow:
-    0 22px 40px rgba(0,0,0,0.38),
-    inset 0 0 0 1px rgba(255, 232, 190, 0.45);
-}
-
-.hero-cta:active {
-  transform: translateY(0px);
-}
-
 .hero-fade {
   position: absolute;
   left: 0;

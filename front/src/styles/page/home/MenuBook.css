@@ -335,27 +335,7 @@
 .mbk-pno::before{ content: "— "; }
 .mbk-pno::after{ content: " —"; }
 
-/* ----- 페이지 안 내용 (Section*.jsx가 portal로 들어옴) ----- */
-.mbk .menu-page-label{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 0 0 22px;
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  color: rgba(90, 64, 44, 0.6);
-  text-transform: uppercase;
-}
-
-.mbk .menu-page-label::before,
-.mbk .menu-page-label::after{
-  content: "";
-  width: 28px;
-  height: 1px;
-  background: rgba(139, 94, 60, 0.4);
-}
-
+/* ----- 페이지 안 내용 (Section*.jsx가 portal로 들어옴, 라벨 모양은 MenuSpread.css) ----- */
 /* 책 안에서는 도시 카드를 한 줄 배치로 (좁은 폭용 @container 규칙보다 우선) */
 .mbk .city-section .city-card{
   flex-direction: row;

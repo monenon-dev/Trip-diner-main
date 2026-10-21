@@ -1,0 +1,328 @@
+/* ===== 스크롤로 넘기는 메뉴판 (MenuBook.jsx) ===== */
+
+.mbk{
+  --leather-1: #4a3428;
+  --leather-2: #2a1c15;
+  --leather-3: #17100c;
+  --gold: rgba(222, 182, 112, 0.92);
+  --gold-soft: rgba(214, 170, 100, 0.55);
+  --ink: #3a2a1f;
+  --flip: 0.9s cubic-bezier(0.3, 0.85, 0.25, 1);
+
+  position: relative;
+  /* 펼침 하나당 80vh씩 스크롤하면 한 장 넘어감 */
+  height: calc(100vh + var(--mbk-spreads) * 80vh);
+}
+
+.mbk-stage{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  padding-top: 68px; /* 고정 헤더 높이 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mbk-book{
+  /* 세로로 긴 페이지 한 장의 크기 (3:4) */
+  --pw: min(calc((100vh - 68px - 72px) * 0.75), calc((100vw - 96px) / 2), 500px);
+  --ph: calc(var(--pw) * 4 / 3);
+
+  position: relative;
+  width: calc(var(--pw) * 2);
+  height: var(--ph);
+  perspective: 2800px;
+  transform-style: preserve-3d;
+
+  /* 넘어간 장은 책 평면보다 뒤(z<0)에 놓여서, 책 자체가 클릭을 가로채지 않게 함
+     (클릭은 .mbk-paper만 받고, 안 보이는 페이지는 inert로 막음) */
+  pointer-events: none;
+
+  /* 닫혀 있을 땐 오른쪽 절반(표지)이 화면 가운데 오도록 */
+  transform: translateX(calc(var(--pw) * -0.5));
+  transition: transform var(--flip);
+}
+
+.mbk-book.is-open{
+  transform: translateX(0);
+}
+
+/* ----- 오른쪽 절반에 쌓이는 장과 바닥판 ----- */
+.mbk-base,
+.mbk-leaf{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+}
+
+.mbk-leaf{
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  /* 넘어가면 translateZ 방향도 뒤집혀서, 나중에 넘긴 장이 왼쪽 맨 위에 쌓임 */
+  transform: rotateY(0deg) translateZ(var(--z));
+  transition: transform var(--flip);
+}
+
+.mbk-leaf.is-flipped{
+  transform: rotateY(-180deg) translateZ(var(--z));
+}
+
+.mbk-face{
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.mbk-face--back{
+  transform: rotateY(180deg);
+}
+
+/* ----- 가죽 판 ----- */
+.mbk-board,
+.mbk-cover{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(520px 380px at 30% 18%, rgba(255,255,255,0.10), rgba(0,0,0,0) 60%),
+    radial-gradient(520px 420px at 80% 92%, rgba(0,0,0,0.30), rgba(0,0,0,0) 62%),
+    linear-gradient(135deg, var(--leather-1) 0%, var(--leather-2) 55%, var(--leather-3) 100%);
+}
+
+.mbk-board--right{
+  border-radius: 4px 18px 18px 4px;
+  box-shadow: 0 34px 70px rgba(0,0,0,0.42), 0 10px 22px rgba(0,0,0,0.25);
+}
+
+.mbk-board--left{
+  border-radius: 18px 4px 4px 18px;
+  box-shadow: 0 34px 70px rgba(0,0,0,0.42), 0 10px 22px rgba(0,0,0,0.25);
+}
+
+/* ----- 표지 ----- */
+.mbk-cover{
+  border-radius: 4px 18px 18px 4px;
+  box-shadow:
+    inset 8px 0 14px rgba(0,0,0,0.45),
+    inset -1px 0 0 rgba(255,255,255,0.06),
+    0 34px 70px rgba(0,0,0,0.42),
+    0 10px 22px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 가장자리 박음질 */
+.mbk-cover::before{
+  content: "";
+  position: absolute;
+  inset: 14px 14px 14px 22px;
+  border: 1.5px dashed var(--gold-soft);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* 금박 테두리 */
+.mbk-cover::after{
+  content: "";
+  position: absolute;
+  inset: 30px 30px 30px 38px;
+  border: 1px solid rgba(214, 170, 100, 0.38);
+  box-shadow: inset 0 0 0 4px rgba(0,0,0,0.12), inset 0 0 0 5px rgba(214, 170, 100, 0.22);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.mbk-cover-inner{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-left: 8px;
+  color: var(--gold);
+}
+
+.mbk-cover-emblem{
+  width: calc(var(--pw) * 0.12);
+  height: calc(var(--pw) * 0.12);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+  margin-bottom: calc(var(--pw) * 0.05);
+}
+
+.mbk-cover-title{
+  margin: 0;
+  font-family: "Playfair Display", "Noto Serif KR", serif;
+  font-size: calc(var(--pw) * 0.1);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #f4dba8 0%, #d9ad66 55%, #b98a45 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+
+.mbk-cover-rule{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: calc(var(--pw) * 0.035) 0;
+  font-size: 10px;
+  color: var(--gold-soft);
+}
+
+.mbk-cover-rule span{
+  width: calc(var(--pw) * 0.14);
+  height: 1px;
+  background: currentColor;
+}
+
+.mbk-cover-sub{
+  margin: 0 -0.6em 0 0;
+  font-size: calc(var(--pw) * 0.032);
+  letter-spacing: 0.6em;
+  color: var(--gold-soft);
+}
+
+.mbk-cover-foot{
+  margin: calc(var(--pw) * 0.16) 0 0;
+  font-family: "Noto Serif KR", serif;
+  font-size: calc(var(--pw) * 0.028);
+  letter-spacing: 0.08em;
+  color: rgba(214, 170, 100, 0.6);
+}
+
+/* ----- 종이 페이지 ----- */
+.mbk-paper{
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 46px 34px 50px;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,0.42), rgba(255,255,255,0.42)),
+    url("/public/assets/textures/main_paper.jpg");
+  background-size: cover;
+  background-blend-mode: soft-light, normal;
+  color: var(--ink);
+  pointer-events: auto;
+}
+
+.mbk-paper--right{
+  left: 2px;
+  right: 12px;
+  border-radius: 2px 10px 10px 2px;
+  box-shadow:
+    inset 18px 0 22px -14px rgba(60,40,25,0.35),
+    /* 아래 깔린 종이들의 단면 */
+    1px 1px 0 #efe6d6,
+    2px 2px 0 #d8cab2,
+    3px 3px 0 #efe6d6;
+}
+
+.mbk-paper--left{
+  left: 12px;
+  right: 2px;
+  border-radius: 10px 2px 2px 10px;
+  box-shadow:
+    inset -18px 0 22px -14px rgba(60,40,25,0.35),
+    -1px 1px 0 #efe6d6,
+    -2px 2px 0 #d8cab2;
+}
+
+/* 메뉴판 이중 테두리 */
+.mbk-paper::before{
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 3px double rgba(139, 94, 60, 0.38);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.mbk-fit{
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  container-type: inline-size;
+}
+
+.mbk-pno{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: rgba(90, 64, 44, 0.55);
+}
+
+.mbk-pno::before{ content: "— "; }
+.mbk-pno::after{ content: " —"; }
+
+/* ----- 페이지 안 내용 (Section*.jsx가 portal로 들어옴) ----- */
+.mbk .menu-page-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 22px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: rgba(90, 64, 44, 0.6);
+  text-transform: uppercase;
+}
+
+.mbk .menu-page-label::before,
+.mbk .menu-page-label::after{
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: rgba(139, 94, 60, 0.4);
+}
+
+/* 책 안에서는 도시 카드를 한 줄 배치로 (좁은 폭용 @container 규칙보다 우선) */
+.mbk .city-section .city-card{
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.mbk .city-section .city-num{ top: 50%; transform: translateY(-50%); }
+.mbk .city-section .city-thumbs{ gap: 6px; }
+.mbk .city-section .city-thumbs img{ width: 58px; height: 44px; border-radius: 10px; }
+.mbk .city-section .s3-right{ gap: 12px; }
+
+/* 넘어가는 동안 아래 깔린 페이지 내용이 미리 페이드인되도록 */
+.mbk .fade-item{
+  transition-delay: 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .mbk-book,
+  .mbk-leaf{
+    transition: none;
+  }
+}
+
+/* 후기 페이지는 내용이 많아 많이 축소되므로 책 안에서는 태그 생략 */
+.mbk .review-section .rv-tags{ display: none; }
+.mbk .review-section .review-right{ gap: 12px; }

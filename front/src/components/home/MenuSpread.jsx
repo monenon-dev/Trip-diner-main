@@ -1,4 +1,7 @@
+import { useContext } from "react";
+import { createPortal } from "react-dom";
 import "../../styles/page/home/MenuSpread.css";
+import { BookSlotContext } from "./MenuBook";
 
 /**
  * 메뉴판(오픈북) 스타일 공통 래퍼
@@ -6,6 +9,8 @@ import "../../styles/page/home/MenuSpread.css";
  * - left/right: 좌/우 페이지 콘텐츠
  * - leftLabel/rightLabel: 페이지 상단 작은 라벨(선택)
  * - size: lg | sm
+ *
+ * MenuBook 안에서 쓰이면(데스크톱) 섹션 박스 대신 책의 해당 페이지 자리로 portal 함
  */
 export default function MenuSpread({
   sectionRef,
@@ -16,6 +21,30 @@ export default function MenuSpread({
   leftLabel,
   rightLabel,
 }) {
+  const bookSlot = useContext(BookSlotContext);
+
+  if (bookSlot) {
+    if (!bookSlot.left || !bookSlot.right) return null;
+    return (
+      <>
+        {createPortal(
+          <div className={`mbk-content ${className}`}>
+            {leftLabel && <div className="menu-page-label">{leftLabel}</div>}
+            {left}
+          </div>,
+          bookSlot.left
+        )}
+        {createPortal(
+          <div className={`mbk-content ${className}`}>
+            {rightLabel && <div className="menu-page-label">{rightLabel}</div>}
+            {right}
+          </div>,
+          bookSlot.right
+        )}
+      </>
+    );
+  }
+
   return (
     <section
       ref={sectionRef}
@@ -31,15 +60,6 @@ export default function MenuSpread({
           <div className="menu-page menu-page--right">
             {rightLabel && <div className="menu-page-label">{rightLabel}</div>}
             {right}
-          </div>
-
-          {/* 화면에 들어올 때 오른쪽 페이지를 덮고 있다가 왼쪽으로 넘어가는 장 */}
-          <div className="menu-flip" aria-hidden="true">
-            <div className="menu-flip-face menu-flip-face--front">
-              <span className="menu-flip-mark">Trip · Diner</span>
-              <span className="menu-flip-sub">MENU</span>
-            </div>
-            <div className="menu-flip-face menu-flip-face--back" />
           </div>
         </div>
       </div>
